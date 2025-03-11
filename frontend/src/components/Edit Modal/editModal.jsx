@@ -1,4 +1,3 @@
-import Input from '../Input/input';
 import Button from '../Button/button';
 import './editModal.css';
 
