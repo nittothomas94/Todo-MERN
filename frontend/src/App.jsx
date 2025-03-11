@@ -2,7 +2,7 @@ import Input from './components/Input/input';
 import Button from './components/Button/button';
 import { useState, useEffect } from 'react';
 import Sidebar from './components/sidebar/sidebar';
-import axios from 'axios';
+import axios from '../utils/axios';
 import DeleteModal from './components/Delete Modal/deleteModal';
 import EditModal from './components/Edit Modal/editModal';
 import moment from 'moment';
@@ -29,7 +29,7 @@ const App = () => {
   };
 
   const onAddclick = async () => {
-    const response = await axios.post('http://localhost:3000/api/addtodo', {
+    const response = await axios.post('/api/addtodo', {
       title: data,
     });
     setTodos([...todos, response.data.data]);
@@ -42,7 +42,7 @@ const App = () => {
   // gettodos
   const gettodos = async () => {
     const response = await axios.get(
-      'http://localhost:3000/api/showtodo?sortorder=asc' // Use 'asc' for oldest first, 'desc' for newest first
+      '/api/showtodo?sortorder=asc' // Use 'asc' for oldest first, 'desc' for newest first
     );
     // console.log(response.data);
     setTodos(response.data);
@@ -51,7 +51,6 @@ const App = () => {
   const onDeleteClick01 = id => {
     setDelModal(true);
     setId(id);
-    console.log('dele cli');
   };
 
   const onCancelClick = () => {
@@ -61,9 +60,7 @@ const App = () => {
 
   const onDeleteClick02 = async id => {
     try {
-      const response = await axios.delete(
-        'http://localhost:3000/api/deletetodo/' + id
-      );
+      const response = await axios.delete('/api/deletetodo/' + id);
       if (response.status === 200) {
         const filteredData = todos.filter(todo => todo._id !== id);
         setTodos(filteredData);
@@ -88,13 +85,11 @@ const App = () => {
     console.log(id);
     try {
       const response = await axios.patch(
-        'http://localhost:3000/api/edittodo/' + id,
+        '/api/edittodo/' + id,
         { title: changeText } // Include the updated text in the request body
       );
       if (response.status === 200) {
-        const updatedTodos = await axios.get(
-          'http://localhost:3000/api/showtodo'
-        );
+        const updatedTodos = await axios.get('/api/showtodo');
         setTodos(updatedTodos.data);
       }
     } catch (err) {
@@ -108,13 +103,11 @@ const App = () => {
   const onStarClick = async (id, currentPriority) => {
     try {
       const response = await axios.patch(
-        'http://localhost:3000/api/edittodo/' + id,
+        '/api/edittodo/' + id,
         { priority: !currentPriority } // Toggle priority based on current state
       );
       if (response.status === 200) {
-        const updatedTodos = await axios.get(
-          'http://localhost:3000/api/showtodo'
-        );
+        const updatedTodos = await axios.get('/api/showtodo');
         setTodos(updatedTodos.data);
       }
     } catch (err) {
@@ -135,7 +128,7 @@ const App = () => {
 
   const onImpClick = async () => {
     const response = await axios.get(
-      'http://localhost:3000/api/showtodo?sortby=priority&sortorder=desc'
+      '/api/showtodo?sortby=priority&sortorder=desc'
     );
     setTodos(response.data);
     handleRowClick('important');
@@ -144,7 +137,7 @@ const App = () => {
 
   const onFilterClick = async () => {
     const response = await axios.get(
-      'http://localhost:3000/api/showtodo?priority=true&sortby=createdAt&sortorder=desc'
+      '/api/showtodo?priority=true&sortby=createdAt&sortorder=desc'
     );
     setTodos(response.data);
     handleRowClick('filter');
