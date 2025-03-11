@@ -8,7 +8,7 @@ app.use(cors());
 app.use(express.json());
 // db connection
 require('./db');
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 const routes = require('./routes');
 app.use('/api', routes);
